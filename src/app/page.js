@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { uploadFile, validateFile, formatFileSize } from '@/services/api';
+// 1. Import the Chat Component
+import ChatInterface from '../components/ChatInterface';
 
 export default function HomePage() {
   const router = useRouter();
@@ -11,6 +13,8 @@ export default function HomePage() {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [uploadedText, setUploadedText] = useState('');
+  // 2. Add State for Chat visibility
+  const [showChat, setShowChat] = useState(false);
 
   // Handle file selection
   const handleFileChange = (e) => {
@@ -234,7 +238,8 @@ export default function HomePage() {
             What would you like to do?
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* 3. Updated Button Grid to include Chat */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button
               onClick={goToSummary}
               className="btn-primary flex items-center justify-center space-x-2"
@@ -254,7 +259,25 @@ export default function HomePage() {
               </svg>
               <span>Generate Quiz</span>
             </button>
+
+            {/* New Chat Button */}
+            <button
+              onClick={() => setShowChat(!showChat)}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center justify-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              <span>Chat with PDF</span>
+            </button>
           </div>
+
+          {/* 4. Chat Interface Display */}
+          {showChat && (
+            <div className="mt-6 animate-fade-in">
+              <ChatInterface documentText={uploadedText} />
+            </div>
+          )}
         </div>
       )}
 
